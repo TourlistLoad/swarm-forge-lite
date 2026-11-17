@@ -49,8 +49,10 @@ def _capabilities(entry: dict) -> list[tuple[str, str]]:
             if capability == "crap":
                 module = "coverage"
             found = importlib.util.find_spec(module) is not None
+            # Only this interpreter is probed; the gates may run on another one.
             rows.append(_row("ok" if found else "warn",
-                             f"capability {capability}: {module} {'available' if found else 'missing'}"))
+                             f"capability {capability}: {module} {'available' if found else 'missing'} "
+                             f"on {sys.executable} (gates may use another interpreter: tools/README.md)"))
         else:
             rows.append(_row("warn", f"capability {capability}: unknown capability"))
     return rows

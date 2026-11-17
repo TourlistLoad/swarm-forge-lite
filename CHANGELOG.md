@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.1 — 2026-11-17
+
+### Fixed
+- `arch classes validate` and `arch classes diff` now see a design edge that code
+  has caught up with. The code edges were (name, name, kind) triples while the
+  overlay compares (id, id) pairs, so no edge ever matched: every overlay edge read
+  as design-only and "edge now exists in code; remove it" never fired. An overlay
+  that still holds realised edges now fails `classes validate`, as documented.
+- `doctor` names the interpreter it probed for the analyzer capabilities, so a
+  `missing` warning on one interpreter is not read as a gate that cannot run.
+
+### Docs
+- `tools/README.md` › Unit and property tests: `gate.py` runs the first `python3` on
+  PATH; run it inside the project's environment when pytest lives there.
+
 ## 0.2.0 — 2026-11-01
 
 ### Added

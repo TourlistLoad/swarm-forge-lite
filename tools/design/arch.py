@@ -51,11 +51,13 @@ def _code_classes() -> dict[str, class_map.ClassInfo]:
     return {cid: info for cid, (_sub, info) in class_map.all_classes(PIPELINE, None).items()}
 
 
-def _code_edges() -> list[tuple[str, str, str]]:
-    edges: list[tuple[str, str, str]] = []
-    for _label, (_number, _classes, sub_edges) in class_map.merged(PIPELINE, None).items():
-        edges.extend(sub_edges)
-    return edges
+def _code_edges() -> set[tuple[str, str]]:
+    """Code edges as (from id, to id): the shape overlay.diff and overlay.validate compare."""
+    pairs: set[tuple[str, str]] = set()
+    for _number, classes, sub_edges in class_map.merged(PIPELINE, None).values():
+        for src, dst, _kind in sub_edges:
+            pairs.add((class_map.class_id(classes[src]), class_map.class_id(classes[dst])))
+    return pairs
 
 
 def _labelled() -> dict[str, tuple[str, class_map.ClassInfo]]:

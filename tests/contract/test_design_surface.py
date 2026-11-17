@@ -636,6 +636,57 @@ def test_classes_validate_names_a_core_to_shell_edge(tmp_path, monkeypatch, caps
     assert "core depends on shell" in capsys.readouterr().out
 
 
+def test_classes_validate_and_diff_flag_an_overlay_edge_the_code_now_has(
+    tmp_path, monkeypatch, capsys
+):
+    # Rejects comparing overlay (id, id) pairs against code (name, name, kind)
+    # triples: no edge ever matched, so a realised design edge stayed "design-only".
+    root = tmp_path / "pkg"
+    for name, body in {
+        "demo/rules.py": (
+            "class Rules:\n"
+            "    def __init__(self, speaker: Speaker):\n"
+            "        self.speaker = speaker\n"
+        ),
+        "demo/speaker.py": "class Speaker:\n    pass\n",
+    }.items():
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(body, encoding="utf-8")
+    design = tmp_path / "design.json"
+    design.write_text(
+        json.dumps(
+            {
+                "nodes": [],
+                "edges": [
+                    {
+                        "from": "demo.rules.Rules",
+                        "to": "demo.speaker.Speaker",
+                        "kind": "dependency",
+                        "since": "2026-11-17",
+                    }
+                ],
+                "annotations": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(arch, "PIPELINE", root)
+    monkeypatch.setattr(arch.paths, "DESIGN", design)
+    monkeypatch.setattr(class_model, "DIAGRAMS", (("01", "demo", ("demo",)),))
+
+    assert arch.main(["classes", "validate"]) == 1
+    assert (
+        "overlay edge demo.rules.Rules -> demo.speaker.Speaker now exists in code"
+        in capsys.readouterr().out
+    )
+    assert arch.main(["classes", "diff"]) == 0
+    assert (
+        "stale overlay edge: demo.rules.Rules -> demo.speaker.Speaker"
+        in capsys.readouterr().out
+    )
+
+
 def test_classes_validate_refuses_a_missing_tree(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(arch, "PIPELINE", tmp_path / "gone")
 

@@ -135,6 +135,12 @@ python3 -m pytest -q "$PROJECT/<property path>"    # where the project has one
 A verdict needs two runs: two agreeing runs prove the suite is stable, one run
 proves only that it passed once. The reviewer runs both twice.
 
+`gate.py` runs these commands with the first `python3` on PATH; it has no option
+to choose an interpreter. When the project keeps pytest in its own environment,
+run the gate inside it — for a uv project, `uv run --project "$PROJECT" python3
+tools/gate.py unit` (the same for `acceptance`, `coverage` and `lcov`). A
+`No module named pytest` exit is the wrong interpreter, not a failing suite.
+
 ## Acceptance
 
 ```sh

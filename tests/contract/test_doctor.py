@@ -118,6 +118,21 @@ def test_capabilities_can_be_disabled_or_unknown(tmp_path):
     assert any("unknown capability" in text for text in texts)
 
 
+def test_an_analyzer_capability_names_the_interpreter_it_probed(tmp_path, monkeypatch):
+    # Rejects a bare "missing": the analyzers may run on another interpreter
+    # (tools/README.md), so the warning must say which one was checked.
+    pack, config = _fixture(tmp_path)
+    config["projects"]["demo"]["capabilities"] = {"duplication": True, "crap": True}
+    doctor = _doctor()
+    monkeypatch.setattr(doctor.importlib.util, "find_spec", lambda _name: None)
+
+    rows = doctor.run(pack, config, "demo")
+
+    analyzer = [text for _, text in rows if text.startswith(("capability duplication", "capability crap"))]
+    assert len(analyzer) == 2
+    assert all(doctor.sys.executable in text for text in analyzer)
+
+
 def test_main_returns_one_on_a_blocking_failure(tmp_path, monkeypatch, capsys):
     pack, config = _fixture(tmp_path)
     config["projects"]["demo"]["project_root"] = str(tmp_path / "gone")
