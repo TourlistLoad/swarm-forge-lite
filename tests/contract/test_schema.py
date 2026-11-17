@@ -46,6 +46,23 @@ def test_an_empty_projects_map_is_an_error():
     assert errors
 
 
+def test_deploy_roots_and_doc_files_are_known_lists_of_paths():
+    # Rejects a schema that does not know the two write roots: the guard reads them,
+    # so an install that sets them must not be warned about a dead key.
+    config = _valid()
+    config["projects"]["demo"]["deploy_roots"] = ["deploy"]
+    config["projects"]["demo"]["doc_files"] = ["README.md"]
+
+    errors, warnings = packschema.validate(config, packschema.load(PACK))
+
+    assert errors == []
+    assert warnings == []
+
+    config["projects"]["demo"]["deploy_roots"] = "deploy"
+    errors, _warnings = packschema.validate(config, packschema.load(PACK))
+    assert errors
+
+
 def test_an_unknown_key_warns_but_does_not_fail():
     config = _valid()
     config["projects"]["demo"]["typo_key"] = 1

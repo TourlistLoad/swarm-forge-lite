@@ -46,12 +46,17 @@ set rather than five claims.
 | Role | Owns | Writes |
 |---|---|---|
 | orchestrator | deciding the chain, dispatch, operator contact | nothing in the project |
-| designer | intent, class design, spec, policy, proposals, design views | `<PROJECT>/<docs_root>/specs/NN-*.md`, `<PROJECT>/<design_root>/{runtime,overlay,policy}.json`, rendered views |
+| designer | intent, class design, spec, policy, proposals, design views, the project's prose docs | `<PROJECT>/<docs_root>/` (specs `NN-*.md` and every other doc), the project's `doc_files`, `<PROJECT>/<design_root>/{runtime,overlay,policy}.json`, rendered views |
 | specifier | behavior and acceptance criteria | `*.feature` |
-| coder | acceptance pipeline, implementation, unit tests | source, tests, generated acceptance |
+| coder | acceptance pipeline, implementation, unit tests, deploy files | source, tests, the project's `deploy_roots`, generated acceptance |
 | test-reviewer | the verdict on the tests; what a green suite actually proves | nothing — findings only, under the artifacts root |
-| refactorer | coverage, property tests, duplication, complexity | source, tests |
-| architect | module boundaries, dependency direction, terminal gate | source, tests |
+| refactorer | coverage, property tests, duplication, complexity | source, tests, `deploy_roots` |
+| architect | module boundaries, dependency direction, terminal gate | source, tests, `deploy_roots` |
+
+`deploy_roots` (install scripts, service units, sample configs) and `doc_files` (prose
+docs outside the docs root, such as a README) are optional per project. Deploy files
+belong to the code roles because acceptance reads them; prose docs belong to the
+designer, who updates them in the reconcile pass once the code is final.
 
 ## Reporting
 

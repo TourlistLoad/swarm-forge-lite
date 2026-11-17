@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.0 — 2026-11-17
+
+### Added
+- Two optional per-project config keys, both lists of paths under the project root:
+  `deploy_roots` (install scripts, service units, sample configs) and `doc_files`
+  (prose docs outside `docs_root`, such as a README). The schema knows both, so
+  setting them raises no unknown-key warning; `pack.example.json` shows them.
+
+### Changed
+- Roles (`protocol/README.md`): the coder, refactorer and architect also write the
+  project's `deploy_roots`, because acceptance reads those files; the designer writes
+  the whole `docs_root` (not only `specs/`) and the project's `doc_files`. Before
+  this, deploy files and non-spec docs had no owner, so every change to them stalled
+  the chain.
+- Reconcile (`protocol/orchestrator.md`): the designer's pass after the last
+  implementation dispatch also brings the prose docs in line with the final code.
+
 ## 0.2.1 — 2026-11-17
 
 ### Fixed

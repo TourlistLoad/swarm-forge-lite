@@ -182,6 +182,12 @@ caught up with, and the designer removes them. Until that pass,
 `arch classes validate` exits 1 on "now exists in code" — expected, not a defect,
 and never a reason to re-dispatch the coder.
 
+The same pass brings the project's prose docs in line with the final code: the
+docs under `<docs_root>` that are not specs and the `doc_files` (a README, a test
+sheet), wherever they name behavior, commands or log lines that changed. They are
+the designer's because they restate the spec; they wait for this pass because the
+log lines and commands they quote are only final once the code is.
+
 ## Finish
 
 The architect ends the chain. The test-reviewer is the one role whose job is to

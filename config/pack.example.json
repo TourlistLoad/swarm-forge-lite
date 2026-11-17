@@ -16,6 +16,8 @@
       "features": "tests/features",
       "docs_root": "docs",
       "design_root": "design",
+      "deploy_roots": [],
+      "doc_files": ["README.md"],
       "specs": {
         "01-<subsystem>.md": "<subsystem>"
       },

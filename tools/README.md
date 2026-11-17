@@ -17,8 +17,10 @@ clean. Never read it as a path inside `$PROJECT`.
 One pack serves several projects. `config/pack.json` holds a `projects` map, and
 each entry carries its own `project_root`, `source_roots`, `class_root`,
 `test_paths`, `unit_paths`, `lint_paths`, `features`, `docs_root`, `specs`,
-`acceptance_command`, `artifacts_root` and `umlview` policy. Every path in this
-file resolves through the selection, so no prompt or role hardcodes a layout.
+`acceptance_command`, `artifacts_root` and `umlview` policy, and optionally
+`deploy_roots` (install scripts and units, written by the code roles) and
+`doc_files` (prose docs outside `docs_root`, written by the designer). Every path
+in this file resolves through the selection, so no prompt or role hardcodes a layout.
 
 `PACK_PROJECT` selects the project; when it is unset, `default_project` applies
 silently. Every command a brief or a snippet shows therefore carries

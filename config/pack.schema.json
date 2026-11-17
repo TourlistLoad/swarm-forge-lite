@@ -76,6 +76,18 @@
           "design_root": {
             "type": "string"
           },
+          "deploy_roots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "doc_files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "specs": {
             "type": "object"
           },
